@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142b4a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="안심알림">
+<link rel="manifest" href="./manifest.json">
+<title>안심알림 - 웹앱 시제품</title>
+<style>
+:root{--navy:#142b4a;--blue:#2563eb;--bg:#f3f6fb;--text:#172033;--muted:#64748b;--line:#e2e8f0}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;background:var(--bg);color:var(--text)}
+.phone{max-width:460px;min-height:100vh;margin:0 auto;background:#fff;box-shadow:0 8px 35px #0f172a12}
+header{background:var(--navy);color:white;padding:25px 22px 23px;border-radius:0 0 24px 24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px}.shield{width:38px;height:38px;border-radius:12px;background:#ffffff1c;display:grid;place-items:center;font-size:22px}
+.sub{margin-top:14px;color:#dbeafe;font-size:13px}
+main{padding:20px}.status{border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;align-items:center;gap:12px}
+.status-icon{width:46px;height:46px;flex-shrink:0;border-radius:15px;background:#eaf2ff;display:grid;place-items:center;font-size:23px}
+.status-title{font-weight:750}.muted{color:var(--muted);font-size:13px;line-height:1.55;margin-top:5px}
+.toggle-wrap{margin-left:auto}.switch{width:48px;height:28px;border:0;border-radius:99px;background:#cbd5e1;padding:3px;cursor:pointer;flex-shrink:0}
+.knob{display:block;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 4px #0002}
+.switch.on{background:#2563eb}.switch.on .knob{transform:translateX(20px)}
+h2{font-size:16px;margin:24px 0 12px}.map{height:170px;border-radius:18px;position:relative;overflow:hidden;background:#edf3f6;border:1px solid var(--line)}
+.map svg{width:100%;height:100%;display:block}.map-label{position:absolute;top:12px;left:12px;background:#ffffffed;border-radius:9px;padding:7px 10px;font-size:12px;font-weight:700}
+.map-note{position:absolute;bottom:10px;left:10px;right:10px;background:#ffffffed;border-radius:9px;padding:8px 10px;font-size:11px;color:#475569}
+.button{width:100%;border:0;border-radius:13px;padding:14px 15px;font-size:14px;font-weight:750;cursor:pointer}
+.primary{background:var(--blue);color:#fff;margin-top:15px}.secondary{background:#eef2ff;color:#1d4ed8;margin-top:9px}.tertiary{background:#f1f5f9;color:#334155;margin-top:9px}
+.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:12px 13px;border-radius:13px;font-size:12px;line-height:1.55;margin-top:15px}
+.activity{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}.activity strong{font-size:13px}.activity p{margin:5px 0 0;font-size:12px;color:var(--muted);line-height:1.5}
+.small{font-size:12px;color:var(--muted);line-height:1.5}footer{padding:18px 20px 28px;color:#94a3b8;font-size:11px;text-align:center}
+#toast{display:none;position:fixed;left:50%;bottom:22px;transform:translateX(-50%);width:min(390px,calc(100% - 32px));background:#172033;color:white;padding:14px 16px;border-radius:13px;box-shadow:0 8px 25px #0003;font-size:13px;line-height:1.5;z-index:5}
+</style>
+</head>
+<body>
+<div class="phone">
+<header><div class="brand"><div class="shield">🛡️</div><div>안심알림 <span style="font-weight:500;font-size:12px;color:#bfdbfe">SAFE ALERT</span></div></div><div class="sub">시민 안전 정보 · 웹앱 시제품</div></header>
+<main>
+<section class="status"><div class="status-icon">🔔</div><div style="flex:1"><div class="status-title">안전 알림 설정</div><div class="muted" id="statusText">테스트 알림을 받을 준비가 되었어요.</div></div><div class="toggle-wrap"><button id="toggle" class="switch on" aria-label="안전 알림 끄기"><span class="knob"></span></button></div></section>
+<h2>안전 현황</h2>
+<div class="map"><svg viewBox="0 0 390 170" preserveAspectRatio="xMidYMid slice" aria-label="장식용 지도"><rect width="390" height="170" fill="#edf3f6"/><path d="M-10 35 L90 55 L160 25 L245 48 L405 18 M-10 115 L85 92 L150 125 L255 102 L400 140 M40 -10 L80 180 M170 -10 L190 180 M300 -10 L275 180" stroke="#fff" stroke-width="13" fill="none"/><path d="M-10 35 L90 55 L160 25 L245 48 L405 18 M-10 115 L85 92 L150 125 L255 102 L400 140 M40 -10 L80 180 M170 -10 L190 180 M300 -10 L275 180" stroke="#d4e0e8" stroke-width="2" fill="none"/><path d="M0 150 C70 130 110 160 160 135 S270 140 390 75" stroke="#b7dce8" stroke-width="12" fill="none"/><circle cx="196" cy="82" r="25" fill="#60a5fa" opacity=".17"/><circle cx="196" cy="82" r="7" fill="#2563eb" stroke="white" stroke-width="3"/></svg><div class="map-label">📍 지도 화면 예시</div><div class="map-note">디자인용 지도입니다. 실제 위치나 대상자를 표시하지 않습니다.</div></div>
+<button class="button primary" id="testBtn">테스트 알림 보내기</button><button class="button secondary" id="permissionBtn">알림 권한 설정</button><button class="button tertiary" id="helpBtn">안전 행동 요령 보기</button>
+<div class="notice"><strong>중요 안내</strong><br>이 시제품은 가상 테스트 알림만 제공합니다. 전자감독 대상자의 위치를 수집·추적·표시하지 않으며, 실제 위험을 판정하지 않습니다.</div>
+<h2>웹앱 상태</h2><div class="activity"><strong id="appStatus">서비스 워커 상태 확인 중</strong><p id="appHelp">실제 푸시 알림 서버는 아직 연결되어 있지 않습니다.</p></div>
+<h2>알림 권한</h2><div class="activity"><strong id="permissionStatus">확인 중</strong><p id="permissionHelp">아이폰 푸시 알림은 홈 화면에 추가한 웹앱 등 별도 조건이 필요할 수 있습니다.</p></div>
+<h2>최근 알림 기록 <span class="small" id="countLabel"></span></h2><div id="history"></div><button class="button tertiary" id="clearBtn">기록 지우기</button>
+<p class="small" style="margin-top:12px">설정과 기록은 이 브라우저의 로컬 저장공간에 저장됩니다. 브라우저 데이터 삭제 또는 다른 기기 사용 시 사라질 수 있어요.</p>
+</main><footer>안심알림 웹앱 시제품 · 긴급 신고 서비스를 대체하지 않습니다.</footer></div><div id="toast" role="status" aria-live="polite"></div>
+<script>
+const KEY='safeAlertPwa_v1';const defaults={enabled:true,notifications:[]};
+let state=loadState(),registration=null;
+function loadState(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&typeof s==='object'?{...defaults,...s,notifications:Array.isArray(s.notifications)?s.notifications:[]}:{...defaults,notifications:[]}}catch(e){return {...defaults,notifications:[]}}}
+function saveState(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){showToast('브라우저 저장공간에 저장하지 못했어요.')}}
+const toggle=document.getElementById('toggle'),statusText=document.getElementById('statusText'),historyBox=document.getElementById('history'),toast=document.getElementById('toast');
+function showToast(m){toast.textContent=m;toast.style.display='block';clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.style.display='none',4000)}
+function render(){toggle.classList.toggle('on',state.enabled);toggle.setAttribute('aria-label',state.enabled?'안전 알림 끄기':'안전 알림 켜기');statusText.textContent=state.enabled?'테스트 알림을 받을 준비가 되었어요.':'알림이 꺼져 있어요.';document.getElementById('countLabel').textContent='('+state.notifications.length+'건)';historyBox.replaceChildren();
+if(!state.notifications.length){const e=document.createElement('div');e.className='activity';e.innerHTML='<strong>아직 알림이 없어요</strong><p>‘테스트 알림 보내기’를 눌러 기능을 확인해 보세요.</p>';historyBox.appendChild(e)}else state.notifications.forEach(n=>{const d=document.createElement('div');d.className='activity';const s=document.createElement('strong');s.textContent='🧪 '+n.title;const p=document.createElement('p');p.textContent=n.time+' · '+n.message;d.append(s,p);historyBox.appendChild(d)});updatePermissionStatus()}
+function updatePermissionStatus(){const t=document.getElementById('permissionStatus'),h=document.getElementById('permissionHelp');if(!('Notification'in window)){t.textContent='이 환경은 브라우저 알림을 지원하지 않아요';h.textContent='HTTPS로 게시한 웹앱에서 다시 확인해 주세요.';return}const p=Notification.permission;t.textContent='브라우저 알림 권한: '+({granted:'허용됨',denied:'차단됨',default:'아직 선택하지 않음'}[p]||p);h.textContent=p==='granted'?'테스트 알림을 표시할 수 있도록 허용되어 있어요.':p==='denied'?'브라우저 또는 기기의 설정에서 권한을 변경해야 할 수 있어요.':'권한 설정 버튼을 눌러 허용 여부를 선택해 주세요.'}
+async function setupSW(){if(!('serviceWorker'in navigator)){document.getElementById('appStatus').textContent='서비스 워커를 지원하지 않는 환경';document.getElementById('appHelp').textContent='HTTPS 웹사이트에서 실행해 주세요.';return}try{registration=await navigator.serviceWorker.register('./sw.js');await navigator.serviceWorker.ready;document.getElementById('appStatus').textContent='서비스 워커 등록 완료';document.getElementById('appHelp').textContent='웹앱 기본 구성은 준비됐어요. 실제 원격 푸시 서버는 아직 연결되지 않았습니다.'}catch(e){document.getElementById('appStatus').textContent='서비스 워커 등록 대기';document.getElementById('appHelp').textContent='HTML 파일을 더블클릭한 상태에서는 등록할 수 없어요. HTTPS 주소로 게시한 뒤 확인해 주세요.'}}
+toggle.addEventListener('click',()=>{state.enabled=!state.enabled;saveState();render();showToast(state.enabled?'안전 알림 설정을 켰어요.':'안전 알림 설정을 껐어요.')});
+document.getElementById('permissionBtn').addEventListener('click',async()=>{if(!('Notification'in window)){showToast('브라우저 알림 API를 사용할 수 없어요. HTTPS 주소에서 다시 시도해 주세요.');return}try{let p=Notification.permission;if(p==='default')p=await Notification.requestPermission();updatePermissionStatus();if(p==='granted')showToast('알림 권한이 허용됐어요. 테스트 알림을 눌러 확인해 보세요.');else showToast('알림 권한 상태: '+({denied:'차단됨',default:'선택되지 않음'}[p]||p))}catch(e){showToast('HTTPS 웹사이트에서 다시 시도해 주세요.')}});
+document.getElementById('testBtn').addEventListener('click',async()=>{if(!state.enabled){showToast('먼저 안전 알림 설정을 켜 주세요.');return}const time=new Date().toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});state.notifications.unshift({title:'테스트 알림 '+(state.notifications.length+1),time,message:'가상 이벤트입니다. 실제 위험 알림이 아닙니다.'});state.notifications=state.notifications.slice(0,30);saveState();render();let msg='테스트 기록을 저장했어요.';
+if('Notification'in window&&Notification.permission==='granted'){try{if(registration&&registration.showNotification){await registration.showNotification('안심알림 테스트',{body:'가상 테스트 알림입니다. 실제 위험 상황이 아닙니다.',icon:'./icon.svg',badge:'./icon.svg',tag:'safe-alert-test'});msg='기록 저장 및 브라우저 알림 요청이 완료됐어요.'}else{new Notification('안심알림 테스트',{body:'가상 테스트 알림입니다. 실제 위험 상황이 아닙니다.'});msg='기록 저장 및 알림 요청이 완료됐어요.'}}catch(e){msg='기록은 저장했지만 시스템 알림은 표시되지 않았어요.'}}else msg+=' 시스템 알림을 원하면 알림 권한을 허용해 주세요.';showToast(msg)});
+document.getElementById('helpBtn').addEventListener('click',()=>showToast('위험을 느끼면 안전한 장소로 이동하고, 긴급한 상황에서는 112에 신고하세요.'));
+document.getElementById('clearBtn').addEventListener('click',()=>{if(!state.notifications.length){showToast('지울 기록이 없어요.');return}if(confirm('저장된 테스트 알림 기록을 모두 지울까요?')){state.notifications=[];saveState();render();showToast('테스트 기록을 지웠어요.')}});
+if('serviceWorker'in navigator&&location.protocol!=='file:')setupSW();else{document.getElementById('appStatus').textContent='웹 주소에서 실행해야 등록 가능';document.getElementById('appHelp').textContent='현재 로컬 파일 상태입니다. HTTPS로 게시하면 서비스 워커를 시험할 수 있어요.'}
+render();
+</script></body></html>
